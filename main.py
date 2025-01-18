@@ -14,6 +14,15 @@ def load_json(file_path, default_value):
             return default_value
     return default_value
 
+def save_json(file_path, data):
+    with open(file_path, 'w') as file:
+        json.dump(data, file, indent=4)
+
+def initialize_files():
+    for file_path, default_value in [(USERS_FILE, {}), (GAMES_FILE, []), (LEADERBOARD_FILE, {})]:
+        if not os.path.exists(file_path):
+            save_json(file_path, default_value)
+
 def main_menu():
     while True:
         console.print("[bold magenta]Main Menu:[/bold magenta]")
