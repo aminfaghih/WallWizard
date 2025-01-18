@@ -118,105 +118,6 @@ def draw_board(board, walls_h, walls_v):
     visual += bottom_border
     console.print(Panel(visual, title="Game Board", expand=False))
 
-def play_game(player1, player2):
-    board = initialize_board()
-    walls = {"P1": 10, "P2": 10}
-    walls_h = set()  # Horizontal walls
-    walls_v = set()  # Vertical walls
-    current_player = "P1"
-    
-
-
-    def move_player(player):
-        console.print(f"[cyan]{player}, enter your move direction (up/down/left/right):[/cyan]")
-        direction = console.input()
-        row, col = [(r, c) for r in range(9) for c in range(9) if board[r][c] == player][0]
-
-        new_row, new_col = row, col
-        if direction == "up" and row > 0 and (row - 1, col) not in walls_h:
-            new_row -= 1
-        elif direction == "down" and row < 8 and (row, col) not in walls_h:
-            new_row += 1
-        elif direction == "left" and col > 0 and (row, col - 1) not in walls_v:
-            new_col -= 1
-        elif direction == "right" and col < 8 and (row, col) not in walls_v:
-            new_col += 1
-        else:
-            console.print("[red]Invalid move. Blocked by a wall or edge of the board. Try again.[/red]")
-            return False
-
-        if board[new_row][new_col] == ".":
-            board[row][col] = "."
-            board[new_row][new_col] = player
-            return True
-        elif board[new_row][new_col] == "P2" or board[new_row][new_col] == "P1":
-    
-            if direction == "up":
-                if new_row >= 1 and (new_row-1,new_col) not in walls_h:
-                    board[row][col] = "."
-                    board[new_row-1][new_col] = player
-                    return True
-                else:
-                    console.print("[red]You can't jump over the oponent!")
-                    console.print("[cyan]You can diagonally move to left or right")
-                    console.print("[cyan]enter your diagnoal move direction (right/left):")
-                    diagonal_direction = console.input()
-                    if diagonal_direction == "right":
-                        if(new_col<8 and ((new_row,new_col) not in walls_v or (new_row,new_col+1) not in walls_h)):
-                            board[row][col] = "."
-                            board[new_row][new_col+1] = player
-                            return True
-                        else:
-                            console.print("[red]Path is blocked by a wall or edge of the board. try something else.")
-                            return False
-                    elif diagonal_direction == "left":
-                        if(new_col>0 and ((new_row,new_col-1) not in walls_v or (new_row,new_col-1) not in walls_h)):
-                            board[row][col] = "."
-                            board[new_row][new_col-1] = player
-                            return True
-                        else:
-                            console.print("[red]Path is blocked by a wall or edge of the board. try something else.")
-                            return False
-
-                    
-            elif direction == "down":
-                if new_row <=7 and (new_row,new_col) not in walls_h:
-                    board[row][col] = "."
-                    board[new_row+1][new_col] = player
-                    return True
-                else:
-                    console.print("[red]You can't jump over the oponent!")
-                    console.print("[cyan]You can diagonally move to left or right")
-                    console.print("[cyan]enter your diagnoal move direction (right/left):")
-                    diagonal_direction = console.input()
-                    if diagonal_direction == "right":
-                        if(new_col<8 and ((new_row,new_col) not in walls_v or (new_row-1, new_col+1) not in walls_h)):
-                            board[row][col] = "."
-                            board[new_row][new_col+1] = player
-                            return True
-                        else:
-                            console.print("[red]Path is blocked by a wall or edge of the board. try something else.")
-                            return False
-                    elif diagonal_direction == "left":
-                        if(new_col>0 and ((new_row-1,new_col-1) not in walls_h or (new_row,new_col-1) not in walls_v)):
-                            board[row][col] = "."
-                            board[new_row][new_col-1] = player
-                            return True
-                        else:
-                            console.print("[red]Path is blocked by a wall or edge of the board! try something else.")
-                            return False
-            else:
-                return False
-        else:
-            console.print("[red]Move blocked. Try again.[/red]")
-            return False
-
-    def place_wall(player):
-        #tabe divar gozari zadeh shavad
-        pass
-    
-    #jaryan bazi dar inja zadeh mishavad
-
 def main_menu():
     while True:
         console.print("[bold magenta]Main Menu:[/bold magenta]")
@@ -243,5 +144,66 @@ def main_menu():
 
         else:
             console.print("[red]Invalid option![/red]")
+
+def main_menu():
+    initialize_files()
+    while True:
+        console.print("[bold magenta]Main Menu:[/bold magenta]")
+        console.print("1. Sign Up")
+        console.print("2. Login")
+        console.print("3. Show Leaderboard")
+        console.print("4. Quit")
+        choice = console.input("Choose an option: ")
+
+        if choice == "1":
+            sign_up()
+
+        elif choice == "2":
+            username1 = login()
+            while(username1==None):
+                username1 = login()
+            if username1 == '-' :
+                continue    
+            console.print("[yellow]Now for player 2:")
+            console.print("[yellow]Enter 1 to log in and 2 to sign up:")
+            player2option = console.input()
+            while(player2option != '1' and player2option != '2'):
+                console.print("[red]Invalid option! Try again.")
+                player2option = console.input()
+            if(player2option == "1"):
+                username2 = login()  
+            if(player2option == "2"):
+                username2 = sign_up()
+            while(username2==None or username2 == username1):
+                if(username2 == username1):
+                    console.print("[red]Player 1 has already picked this account! You must try another one.")
+                console.print("[yellow]Player 2:")
+                console.print("[yellow]Enter 1 to log in and 2 to sign up:")
+                player2option = console.input()
+                while(player2option != '1' and player2option != '2'):
+                    console.print("[red]Invalid option! Try again.")
+                    player2option = console.input()
+                if(player2option == "1"):
+                    username2 = login()  
+                if(player2option == "2"):
+                    username2 = sign_up()
+            if(username2 == '-'):
+                continue
+                
+            play_game(username1, username2)  
+
+        elif choice == "3":
+            #namayesh leader board
+            pass
+
+        elif choice == "4":
+            console.print("[bold green]Goodbye![/bold green]")
+            break
+
+        else:
+            console.print("[red]Invalid option![/red]")
+
+if name == "main":
+    main_menu()
 
 
