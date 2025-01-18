@@ -19,6 +19,6 @@
 ابتدا مخزن را کلون کرده و وابستگی‌ها را نصب کنید:
 
 ```bash
-git clone https://github.com/yourusername/WallWizard.git  
+git clone https://github.com//aminfaghih/WallWizard  
 cd WallWizard  
 pip install -r requirements.txt  
