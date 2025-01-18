@@ -118,6 +118,7 @@ def draw_board(board, walls_h, walls_v):
     visual += bottom_border
     console.print(Panel(visual, title="Game Board", expand=False))
 
+
 def play_game(player1, player2):
     board = initialize_board()
     walls = {"P1": 10, "P2": 10}
@@ -177,7 +178,6 @@ def play_game(player1, player2):
                         else:
                             console.print("[red]Path is blocked by a wall or edge of the board. try something else.")
                             return False
-
                     
             elif direction == "down":
                 if new_row <=7 and (new_row,new_col) not in walls_h:
@@ -212,10 +212,73 @@ def play_game(player1, player2):
             return False
 
     def place_wall(player):
-        #tabe divar gozari zadeh shavad
-        pass
-    
-    #jaryan bazi dar inja zadeh mishavad
+        console.print(f"[cyan]{player}, enter the wall position (row,col,orientation [h/v]):[/cyan]")
+        try:
+            row, col, orientation = console.input().strip().split(",")
+            row, col = int(row)-1, int(col)-1
+            if orientation not in ("h", "v"):
+                raise ValueError("Invalid orientation")
+            if walls[player] <= 0:
+                console.print("[red]No walls left![/red]")
+                return False
+            
+            if orientation == "h":
+                if col>=0 and col <=7 and row<=7 and row>=0 and (row, col) not in walls_h and (row, col+1) not in walls_h:
+                    if row<7 and (row,col) in walls_v and (row+1,col) in walls_v:
+                        console.print("[red]Walls must not overlap!")
+                        return False
+                    #tabe masir yabi dfs/bfs bayad zadeh shavad ta barresi shavad masir
+                    walls_h.add((row, col))
+                    walls_h.add((row, col+1))
+                else:
+                    console.print("[red]Wall already exists or invalid position![/red]")
+                    return False
+            elif orientation == "v":
+                if row >=0 and row <= 7 and col>=0 and col<=7 and (row, col) not in walls_v and (row+1, col) not in walls_v:
+                    if col<7 and (row,col) in walls_h and (row,col+1) in walls_h:
+                        console.print("[red]Walls must not overlap!")
+                        return False
+                    #tabe masir yabi dfs/bfs bayad zadeh shavad ta barresi shavad masir
+                    walls_v.add((row, col))
+                    walls_v.add((row+1, col))
+                else:
+                    console.print("[red]Wall already exists or invalid position![/red]")
+                    return False
+
+            walls[player] -= 1
+            return True
+        except ValueError:
+            console.print("[red]Invalid input. Format should be row,col,orientation (e.g., 3,4,h).[/red]")
+            return False
+        except Exception:
+            console.print("[red]Unexpected error. Try again.[/red]")
+            return False
+
+    while True:
+        draw_board(board, walls_h, walls_v)
+        console.print(f"[bold yellow]It's {current_player}'s turn![/bold yellow]")
+        console.print(f"[cyan]The number of walls left for {current_player}: ", walls[current_player])
+        action = console.input("Choose action (move/wall/quit): ").strip().lower()
+
+        if action == "quit":
+            console.print("[red]Game quit![/red]")
+            break
+        elif action == "move":
+            if move_player(current_player):
+                p1r,p1c = [(ro, co) for ro in range(9) for co in range(9) if board[ro][co] == "P1"][0]
+                p2r,p2c = [(ro2, co2) for ro2 in range(9) for co2 in range(9) if board[ro2][co2] == "P2"][0]
+                if current_player == "P1" and p1r >= 8:
+                    console.print("[green]P1 wins![/green]")
+                    break
+                elif current_player == "P2" and p2r<=0:
+                    console.print("[green]P2 wins![/green]")
+                    break
+                current_player = "P2" if current_player == "P1" else "P1"
+        elif action == "wall":
+            if place_wall(current_player):
+                current_player = "P2" if current_player == "P1" else "P1"
+        else:
+            console.print("[red]Invalid action. Try again.[/red]")
 
 def main_menu():
     while True:
