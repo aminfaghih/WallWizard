@@ -23,6 +23,12 @@ def initialize_files():
         if not os.path.exists(file_path):
             save_json(file_path, default_value)
 
+def hash_password(password):
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+def verify_password(password, hashed):
+    return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
+
 def main_menu():
     while True:
         console.print("[bold magenta]Main Menu:[/bold magenta]")
