@@ -76,6 +76,11 @@ def login():
         return None
     console.print("[green]Login successful![/green]")
     return username
+def initialize_board():
+    board = [["." for _ in range(9)] for _ in range(9)]
+    board[0][4] = "P1"
+    board[8][4] = "P2"
+    return board
 
 
 def draw_board(board, walls_h, walls_v):
