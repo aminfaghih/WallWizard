@@ -29,6 +29,27 @@ def hash_password(password):
 def verify_password(password, hashed):
     return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
 
+def sign_up():
+    users = load_json(USERS_FILE, {})
+    console.print("[bold cyan]Sign-Up:[/bold cyan]")
+    username = console.input("Enter username: ")
+    if username == "":
+        return '-'
+    if username in users:
+        console.print("[red]Username already exists![/red]")
+        return None
+    email = console.input("Enter email: ")
+    password = console.input("Enter password: ", password=True)
+    user_id = str(uuid.uuid4())
+    users[username] = {
+        "id": user_id,
+        "email": email,
+        "password": hash_password(password),
+        "games": []
+    }
+    save_json(USERS_FILE, users)
+    console.print("[green]Account created successfully![/green]")
+    return username
 def main_menu():
     while True:
         console.print("[bold magenta]Main Menu:[/bold magenta]")
