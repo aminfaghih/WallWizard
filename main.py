@@ -177,6 +177,46 @@ def play_game(player1, player2):
                         else:
                             console.print("[red]Path is blocked by a wall or edge of the board. try something else.")
                             return False
+
+                    
+            elif direction == "down":
+                if new_row <=7 and (new_row,new_col) not in walls_h:
+                    board[row][col] = "."
+                    board[new_row+1][new_col] = player
+                    return True
+                else:
+                    console.print("[red]You can't jump over the oponent!")
+                    console.print("[cyan]You can diagonally move to left or right")
+                    console.print("[cyan]enter your diagnoal move direction (right/left):")
+                    diagonal_direction = console.input()
+                    if diagonal_direction == "right":
+                        if(new_col<8 and ((new_row,new_col) not in walls_v or (new_row-1, new_col+1) not in walls_h)):
+                            board[row][col] = "."
+                            board[new_row][new_col+1] = player
+                            return True
+                        else:
+                            console.print("[red]Path is blocked by a wall or edge of the board. try something else.")
+                            return False
+                    elif diagonal_direction == "left":
+                        if(new_col>0 and ((new_row-1,new_col-1) not in walls_h or (new_row,new_col-1) not in walls_v)):
+                            board[row][col] = "."
+                            board[new_row][new_col-1] = player
+                            return True
+                        else:
+                            console.print("[red]Path is blocked by a wall or edge of the board! try something else.")
+                            return False
+            else:
+                return False
+        else:
+            console.print("[red]Move blocked. Try again.[/red]")
+            return False
+
+    def place_wall(player):
+        #tabe divar gozari zadeh shavad
+        pass
+    
+    #jaryan bazi dar inja zadeh mishavad
+
 def main_menu():
     while True:
         console.print("[bold magenta]Main Menu:[/bold magenta]")
