@@ -1,4 +1,13 @@
-from rich.console import console
+
+import os
+import json
+import bcrypt
+import uuid
+import random
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
+
 console = Console()
 
 USERS_FILE = "users.json"
