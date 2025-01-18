@@ -50,6 +50,24 @@ def sign_up():
     save_json(USERS_FILE, users)
     console.print("[green]Account created successfully![/green]")
     return username
+
+
+def login():
+    users = load_json(USERS_FILE, {})
+    console.print("[bold cyan]Login:[/bold cyan]")
+    username = console.input("Enter username: ")
+    if username == "":
+        return '-'
+    if username not in users:
+        console.print("[red]Username does not exist![/red]")
+        return None
+    password = console.input("Enter password: ", password=True)
+    if not verify_password(password, users[username]["password"]):
+        console.print("[red]Incorrect password![/red]")
+        return None
+    console.print("[green]Login successful![/green]")
+    return username
+
 def main_menu():
     while True:
         console.print("[bold magenta]Main Menu:[/bold magenta]")
