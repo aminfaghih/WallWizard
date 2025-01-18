@@ -1,4 +1,18 @@
 from rich.console import console
+console = Console()
+
+USERS_FILE = "users.json"
+GAMES_FILE = "games.json"
+LEADERBOARD_FILE = "leaderboard.json"
+
+def load_json(file_path, default_value):
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, 'r') as file:
+                return json.load(file)
+        except (json.JSONDecodeError, ValueError):
+            return default_value
+    return default_value
 
 def main_menu():
     while True:
