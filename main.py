@@ -68,6 +68,42 @@ def login():
     console.print("[green]Login successful![/green]")
     return username
 
+
+def draw_board(board, walls_h, walls_v):
+    top_border = "┌───" + "┬───" * 8 + "┐\n"
+    bottom_border = "└───" + "┴───" * 8 + "┘\n"
+    visual = top_border
+    for row in range(9):
+        line = "│"
+        for col in range(9):
+            if (row,col) in walls_v:
+                if board[row][col] == "P1":
+                    line += "⚫ ┃"
+                elif board[row][col] == "P2":
+                    line += "⚪ ┃"
+                else:
+                    line += "   ┃"
+            else:
+                if board[row][col] == "P1":
+                    line += "⚫ │"
+                elif board[row][col] == "P2":
+                    line += "⚪ │"
+                else:
+                    line += "   │"
+                
+        visual += line + "\n"
+        if row < 8:
+            horizontal_line = "├"
+            for col in range(9):
+                if (row, col) in walls_h:
+                    horizontal_line += "═══"
+                else:
+                    horizontal_line += "───"
+                horizontal_line += "┼" if col < 8 else "┤"
+            visual += horizontal_line + "\n"
+    visual += bottom_border
+    console.print(Panel(visual, title="Game Board", expand=False))
+
 def main_menu():
     while True:
         console.print("[bold magenta]Main Menu:[/bold magenta]")
